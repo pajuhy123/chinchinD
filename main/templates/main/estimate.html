@@ -55,22 +55,22 @@
     <!--nav_left-->
     <div class='nav_left'>
         <h3>OPTION <input type="button" value="초기화" onclick="none_fy();"></h3>
-        <input type="button" value="지붕공사" onclick="roof_bar_click('roof_bar');">
-        <div id ="roof_bar" style= "display: block;">
-            <ul class = "roof_bar_list">
-                <li class = "tooltips"><input type="radio" class="like" id ="roof1" name="roof" value="이중그림자실드" onclick="button1_click(id);"><span>1억</span><p>이중그림자실드</p></li>
-                <li class = "tooltips"><input type="radio" class="like" id ="roof2" name="roof" value="아스필트가와" onclick="button1_click(id);"><span>2억</span><p>아스필트가와</p></li>
-                <li class = "tooltips"><input type="radio" class="like" id ="roof3" name="roof" value="금속기와" onclick="button1_click(id);"><span>3억</span><p>금속기와</p></li>
-                <li class = "tooltips"><input type="radio" class="like" id ="roof4" name="roof" value="점토단색기와" onclick="button1_click(id);"><span>4억</span><p>점토단색기와</p></li>
-                <li class = "tooltips"><input type="radio" class="like" id ="roof5" name="roof" value="점토변색기와" onclick="button1_click(id);"><span>5억</span><p>점토변색기와</p></li>
+        <div id ="roof_bar" class="bar" >
+            <p style="padding:0; margin:0;"><input id="roof_bar_button" type="button" value="지붕공사"></p>
+            <ul id = "roofUl" class = "bar_list bar_list_shrink">
+                <li class = "tooltips"><input type="radio" class="like" id ="roof1" name="roof" value="이중그림자실드" onclick="button1_click(id);"><span class="money">1억</span> 이중그림자실드</li>
+                <li class = "tooltips"><input type="radio" class="like" id ="roof2" name="roof" value="아스필트가와" onclick="button1_click(id);"><span class="money">2억</span> 아스필트가와</li>
+                <li class = "tooltips"><input type="radio" class="like" id ="roof3" name="roof" value="금속기와" onclick="button1_click(id);"><span class="money">3억</span> 금속기와</li>
+                <li class = "tooltips"><input type="radio" class="like" id ="roof4" name="roof" value="점토단색기와" onclick="button1_click(id);"><span class="money">4억</span> 점토단색기와</li>
+                <li class = "tooltips"><input type="radio" class="like" id ="roof5" name="roof" value="점토변색기와" onclick="button1_click(id);"><span class="money">5억</span> 점토변색기와</li>
             </ul>
         </div>
-        <input type="button" value="현관도어" onclick="door_bar_click('door_bar');">
-        <div id ="door_bar" style= "display: block;">
-            <ul class = "door_bar_list">
-                <li class = "tooltips"><input type="radio" class="like" id ="door1" name="door" value="화이버글라스도어" onclick="button1_click(id);"><span>1억</span><p>화이버글라스도어</p></li>
-                <li class = "tooltips"><input type="radio" class="like" id ="door2" name="door" value="원목도어(엘더)" onclick="button1_click(id);"><span>2억</span><p>원목도어(엘더)</p></li>
-                <li class = "tooltips"><input type="radio" class="like" id ="door3" name="door" value="알루미늄 단열도어" onclick="button1_click(id);"><span>3억</span><p>알루미늄 단열도어</p></li>
+        <div id ="door_bar" class="bar" >
+            <p style="padding:0; margin:0"><input id="door_bar_button" type="button" value="현관도어"></p>
+            <ul id = "doorUl" class = "bar_list bar_list_shrink">
+                <li class = "tooltips"><input type="radio" class="like" id ="door1" name="door" value="화이버글라스도어" onclick="button1_click(id);"><span class="money">1억</span>화이버글라스도어</li>
+                <li class = "tooltips"><input type="radio" class="like" id ="door2" name="door" value="원목도어(엘더)" onclick="button1_click(id);"><span class="money">2억</span>원목도어(엘더)</li>
+                <li class = "tooltips"><input type="radio" class="like" id ="door3" name="door" value="알루미늄 단열도어" onclick="button1_click(id);"><span class="money">3억</span>알루미늄 단열도어</li>
             </ul>
         </div>
     </div>
@@ -117,6 +117,46 @@
         var total_price = 0;
         var door_price = 0;
         var roof_price = 0;
+
+        /*애니메이션 콜백 함수*/
+        roofUl = document.getElementById("roofUl");
+        roofUl.addEventListener('transitionend', function (event){
+            if(roofUl.classList.contains('bar_list_expand')){
+                roofUl.style.overflow="visible";
+            }
+        });
+
+        roof_bar_button = document.getElementById("roof_bar_button");
+        roof_bar_button.addEventListener("click",function (event){
+            if(roofUl.style.overflow!="visible"){
+                roofUl.classList.remove('bar_list_shrink');
+                roofUl.classList.add('bar_list_expand');
+            }else{
+                roofUl.style.overflow="hidden";
+                roofUl.classList.remove('bar_list_expand');
+                roofUl.classList.add('bar_list_shrink');
+            }
+        });
+
+        doorUl = document.getElementById("doorUl");
+        doorUl.addEventListener('transitionend', function (event){
+            if(doorUl.classList.contains('bar_list_expand')){
+                doorUl.style.overflow="visible";
+            }
+        });
+
+        door_bar_button = document.getElementById("door_bar_button");
+        door_bar_button.addEventListener("click",function (event){
+            if(doorUl.style.overflow!="visible"){
+                doorUl.classList.remove('bar_list_shrink');
+                doorUl.classList.add('bar_list_expand');
+            }else{
+                doorUl.style.overflow="hidden";
+                doorUl.classList.remove('bar_list_expand');
+                doorUl.classList.add('bar_list_shrink');
+            }
+        });
+
         /* 총 가격 계산 */
         function total_com(){ 
             total_price = total_computation[0] + total_computation[1];
@@ -172,29 +212,17 @@
                 fetchImage(check_computation);
             }
             //document.getElementById("total_price").innerHTML = "총 가격 : "+total_price+"억";
+            if (input.slice(0,-1) == 'door'){
+                motherId = "doorUl";
+            }else{
+                motherId = 'roofUl';
+            }
+            mother = document.getElementById(motherId)
+            if(mother.style.maxHeight != "500px"){
+                mother.style.maxHeight = "500px";
+            }
             
-        }
-        function roof_bar_click(id) {
-            var divelement = document.getElementById(id);
-            //alert(divelement.id);
-            if(divelement.style.display == 'none'){
-                divelement.style.display = 'block';
-                //alert(divelement.id);
-            }else{
-                divelement.style.display = 'none';
-                //alert(divelement);
-            } 
-        }
-        function door_bar_click(id) {
-            var divelement = document.getElementById(id);
-            //alert(divelement.id);
-            if(divelement.style.display == 'none'){
-                divelement.style.display = 'block';
-                //alert(divelement.id);
-            }else{
-                divelement.style.display = 'none';
-                //alert(divelement);
-            } 
+            
         }
          //여러개 선택시 사진 출력 함수 ex) roof1 + door2  
         
