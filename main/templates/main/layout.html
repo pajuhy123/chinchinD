@@ -1,0 +1,61 @@
+       
+        <!--슬라이드 뷰-->
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators 
+                <ol class="carousel-indicators">
+                  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                  <li data-target="#myCarousel" data-slide-to="1"></li>
+                  <li data-target="#myCarousel" data-slide-to="2"></li>
+                  <li data-target="#myCarousel" data-slide-to="3"></li>
+                  <li data-target="#myCarousel" data-slide-to="4"></li>
+                </ol>
+                -->
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                  <div class="item active" >
+                    <img src="{% static "img/a.png" %}" id ="a" alt="1" style="width:100%">
+                  </div>
+            
+                  <div class="item">
+                    <img src="{% static "img/b.png" %}" id ="b" alt="2" style="width:100%">
+                  </div>
+                
+                  <div class="item">
+                    <img src="{% static "img/c.png" %}" id ="c" alt="3" style="width:100%">
+                  </div>
+                  <div class="item">
+                    <img src="{% static "img/d.png" %}" id ="d" alt="4" style="width:100%">
+                  </div>
+                  <div class="item">
+                    <img src="{% static "img/e.png" %}" id ="e" alt="5" style="width:100%">
+                  </div>
+                </div>
+            
+                <!-- Left and right controls -->
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                  <span class="glyphicon glyphicon-chevron-left"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+
+
+              <script>
+                    function button1_click(name) {
+                        //alert("버튼1을 누르셨습니다.");
+                        var input = name;
+                        //alert(input);
+                        //document.getElementById( input ).setAttribute( 'src', 'src="{% static "colors/a.png" %}"' )
+                        var orgin = document.getElementById( input ).getAttribute('src');
+                        var check_id = '/static/img/'+input+'.png';
+                        if(orgin == check_id){ //기본 건물일 때
+                           document.getElementById( input ).setAttribute('src','/static/colors/'+input+'.png');
+                        }else{ // 색상 or 기능 적용 들어갈 때, 
+                            document.getElementById( input ).setAttribute('src','/static/img/'+input+'.png');
+                        }
+                        //alert(tt);
+                    }
+            </script>

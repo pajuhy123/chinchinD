@@ -1,0 +1,258 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ChinChinD</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 
+    <!--<link rel='stylesheet' href='/static/style.css'>-->
+  <link rel='stylesheet' href="{% static "style.css" %}">
+</head>
+<body>
+
+
+{% load staticfiles %}
+<nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    </button>
+                <a class="navbar-brand" href="#">ChinChinD</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact {{current_datetime}}</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {%if not user.is_authenticated %}
+                        <li><a href="#">회원가입</a></li>
+                        <li><a href="#">로그인</a></li> 
+                    {%else%}                                   {# request.path 현재 페이지로#}
+                        <li><a href="#">프로필</a></li>
+                        <li><a href="#">로그아웃</a></li> 
+                    {%endif%}
+                </ul>
+            </div>
+        </div>
+</nav>   
+<div class="container"> 
+    <p style="text-align: center;"><img src = "{% static "logo.png" %}" style="width:20%"></p>
+    <!--section-->
+    <div class='section'>
+        <div class="building" >
+        <img src = "{% static "img/none.png" %}" id ="none" alt="1" style="width:100%">
+        </div>
+    </div>
+    <!--nav_left-->
+    <div class='nav_left'>
+        <h3>OPTION <input type="button" value="초기화" onclick="none_fy();"></h3>
+        <input type="button" value="지붕공사" onclick="roof_bar_click('roof_bar');">
+        <div id ="roof_bar" style= "display: block;">
+            <ul class = "roof_bar_list">
+                <li class = "tooltips"><input type="radio" class="like" id ="roof1" name="roof" value="이중그림자실드" onclick="button1_click(id);"><span>1억</span><p>이중그림자실드</p></li>
+                <li class = "tooltips"><input type="radio" class="like" id ="roof2" name="roof" value="아스필트가와" onclick="button1_click(id);"><span>2억</span><p>아스필트가와</p></li>
+                <li class = "tooltips"><input type="radio" class="like" id ="roof3" name="roof" value="금속기와" onclick="button1_click(id);"><span>3억</span><p>금속기와</p></li>
+                <li class = "tooltips"><input type="radio" class="like" id ="roof4" name="roof" value="점토단색기와" onclick="button1_click(id);"><span>4억</span><p>점토단색기와</p></li>
+                <li class = "tooltips"><input type="radio" class="like" id ="roof5" name="roof" value="점토변색기와" onclick="button1_click(id);"><span>5억</span><p>점토변색기와</p></li>
+            </ul>
+        </div>
+        <input type="button" value="현관도어" onclick="door_bar_click('door_bar');">
+        <div id ="door_bar" style= "display: block;">
+            <ul class = "door_bar_list">
+                <li class = "tooltips"><input type="radio" class="like" id ="door1" name="door" value="화이버글라스도어" onclick="button1_click(id);"><span>1억</span><p>화이버글라스도어</p></li>
+                <li class = "tooltips"><input type="radio" class="like" id ="door2" name="door" value="원목도어(엘더)" onclick="button1_click(id);"><span>2억</span><p>원목도어(엘더)</p></li>
+                <li class = "tooltips"><input type="radio" class="like" id ="door3" name="door" value="알루미늄 단열도어" onclick="button1_click(id);"><span>3억</span><p>알루미늄 단열도어</p></li>
+            </ul>
+        </div>
+    </div>
+     <!--nav_left-->
+     <div class='nav_right'>
+            <h3>PRICE</h3>
+            <p>예상 가격</p>
+            <ol>
+               <li><p id='roof_price'>지붕공사 : 0억</p></li>
+               <li><p id='door_price'>현관도어 : 0억</p></li>
+               <li><p id='total_price'>총 가격 : 0억</p></li>
+            </ol>
+    </div>
+    
+</div>
+
+ <!--footer-->
+ <div class='footer'>
+    <p>&copy;LionRocket</p>        
+</div>
+
+</body>
+</html>
+<!---
+<script type="text/javascript">
+    $('.like').click(function(){
+        alert("씨발!!!");
+
+    var pk = $(this).attr('name') //a, b, c.. 가 저장
+
+    
+    $('#'+ pk).html("count : "+ response.likes_count);
+    })
+    
+</script>
+-->
+<script>
+        var total_computation = []; // 총 견적 가격 계산을 위한 
+        var check_computation = []; //사용자가 체크한 것들을 누적해서 저장할리스트 door1 roof3
+        total_computation[0] = 0;
+        total_computation[1] = 0;
+        check_computation[0] = '';
+        check_computation[1] = '';
+        var total_price = 0;
+        var door_price = 0;
+        var roof_price = 0;
+        /* 총 가격 계산 */
+        function total_com(){ 
+            total_price = total_computation[0] + total_computation[1];
+            document.getElementById("total_price").innerHTML = "총 가격 : "+total_price+"억";
+        }
+        /* 견적 초기화 */
+        function none_fy(){
+
+            document.getElementById("none").setAttribute('src','/static/img/none.png'); // 해당 기와로 사진을 바꿈
+            total_computation[0] = 0;
+            total_computation[1] = 0;
+            total_price = 0;
+            door_price = 0;
+            roof_price = 0;
+            document.getElementById("roof_price").innerHTML = "지붕공사 : 0억";
+            document.getElementById("door_price").innerHTML = "현관도어 : 0억";
+            document.getElementById("total_price").innerHTML = "총 가격 : 0억";
+            $("input:radio[name='roof']").prop('checked', false); // 지붕 체크선택하기 // 세부 조건 :radio[value='초기화'
+            $("input:radio[name='door']").prop('checked', false); // 현관문 체크선택하기
+
+        }
+
+        function button1_click(name) {
+
+            var input = name;//선택한 기와 종류가 저장됨
+            //var orgin = document.getElementById("roof").getAttribute('src');
+            //alert(orgin);
+          
+            if(input.indexOf("door") != -1){
+                total_computation[0] = 0;
+                check_computation[0] = 0;
+                document.getElementById("none").setAttribute('src','/static/img/door/'+input+'.png'); // 해당 기와로 사진을 바꿈
+                door_price = doorObject[input]; //선택된 기와의 가격
+                total_computation[0] = door_price;
+                check_computation[0] = input; //id 값이 들어감 door1, door2
+                document.getElementById("door_price").innerHTML = "현관도어 : "+door_price+"억";
+                total_com();
+               
+            }else{
+                total_computation[1] = 0;
+                check_computation[1] = 0;
+                document.getElementById("none").setAttribute('src','/static/img/roof/'+input+'.png'); // 해당 기와로 사진을 바꿈
+                roof_price = roofObject[input];
+                total_computation[1] = roof_price;
+                check_computation[1] = input; //id 값이 들어감 roof1, roof2
+                document.getElementById("roof_price").innerHTML = "지붕공사 : "+roof_price+"억";
+                total_com();
+            }
+            
+            //total_price = total_computation[0] + total_computation[1];
+            //alert(check_computation[0])
+            if(total_computation[1] != 0 && total_computation[0] != 0){
+                fetchImage(check_computation);
+            }
+            //document.getElementById("total_price").innerHTML = "총 가격 : "+total_price+"억";
+            
+        }
+        function roof_bar_click(id) {
+            var divelement = document.getElementById(id);
+            //alert(divelement.id);
+            if(divelement.style.display == 'none'){
+                divelement.style.display = 'block';
+                //alert(divelement.id);
+            }else{
+                divelement.style.display = 'none';
+                //alert(divelement);
+            } 
+        }
+        function door_bar_click(id) {
+            var divelement = document.getElementById(id);
+            //alert(divelement.id);
+            if(divelement.style.display == 'none'){
+                divelement.style.display = 'block';
+                //alert(divelement.id);
+            }else{
+                divelement.style.display = 'none';
+                //alert(divelement);
+            } 
+        }
+         //여러개 선택시 사진 출력 함수 ex) roof1 + door2  
+        
+        function fetchImage(params){ //인자로 check_computaion 배열을 받는다
+
+             var door_check_id = params[0];
+             var roof_check_id = params[1];
+             //alert(door_check_id);
+             
+             var door_lastChar = door_check_id.substr(door_check_id.length - 1); // => "door2 에서 2를 추출
+             var roof_lastChar = roof_check_id.substr(roof_check_id.length - 1); // => "roof4 에서 4를 추출
+
+             var index = roof_lastChar + door_lastChar // 42 
+
+             var picture_name = rdObject[index] // rd42
+             //alert(picture_name); 
+
+             document.getElementById("none").setAttribute('src','/static/img/roof_door/'+picture_name+'.png');
+
+
+        }
+    
+
+        var roofObject = {} // {a:0, b:1, c:2, d:3 ...} 글로벌로 선언 가격이 들어갈// 지붕가격
+            roofObject['a'] = 0;
+            roofObject['roof1'] = 1;
+            roofObject['roof2'] = 2;
+            roofObject['roof3'] = 3;
+            roofObject['roof4'] = 4;
+            roofObject['roof5'] = 5;
+        
+        var doorObject = {} // 현관 도어의 가격이
+            doorObject['a'] = 0;
+            doorObject['door1'] = 1;
+            doorObject['door2'] = 2;
+            doorObject['door3'] = 3;
+        
+        /* roof1 + door2 이런식으로 변수명을 지정하고, 이것을 키로 하고 실제 사진파일명을 저장한 딕셔너리를 따로 만들자  
+           11 -> rd11.png --> roof1+door1 결합된 사진 
+           rd11 : elegant.png 이런식으로 
+           사진파일이 많아지면 복잡해지기 때문에, 변수를 효과적으로 관리 할 수 있도록 짜야한다. 
+        */
+
+        var rdObject = {} // roof+door 딕셔너리
+            rdObject['11'] = 'rd11';
+            rdObject['12'] = 'rd12';
+            rdObject['13'] = 'rd13';
+            rdObject['21'] = 'rd21';
+            rdObject['22'] = 'rd22';
+            rdObject['23'] = 'rd23';
+            rdObject['31'] = 'rd31';
+            rdObject['32'] = 'rd32';
+            rdObject['33'] = 'rd33';
+            rdObject['41'] = 'rd41';
+            rdObject['42'] = 'rd42';
+            rdObject['43'] = 'rd43';
+            rdObject['51'] = 'rd51';
+            rdObject['52'] = 'rd52';
+            rdObject['53'] = 'rd53';
+</script>
+
